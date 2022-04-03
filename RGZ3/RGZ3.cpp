@@ -14,17 +14,19 @@ void OutputStruct(Fraction arr[], int& n)//вывод массива струк�
 {
     for (int i = 0; i < n; i++)
     {
-        printf("%d %d\n", arr[n].chisl, arr[n].znam);
+        printf("%d %d\n", arr[i].chisl, arr[i].znam);
     }
 }
-void check_input(int &chisl, int &znam)//Проверка ввода данных
+void check_input(int& chisl, int& znam)//Проверка ввода данных
 {
+    char temp[N];
     do
     {
         printf("Введите числитель: ");
         do
         {
-            scanf("%d", &chisl);
+            //scanf("%d", &chisl);
+            chisl = atoi(gets_s(temp));
             if (chisl > 0)  break;
             printf("\nОшибка при вводе числителя! Повторите ввод: ");
         } while (1);
@@ -32,14 +34,15 @@ void check_input(int &chisl, int &znam)//Проверка ввода данны�
         printf("Введите знаменатель: ");
         do
         {
-            scanf("%d", &znam);
+            //scanf("%d", &znam);
+            znam = atoi(gets_s(temp));
             if (znam > 0)  break;
             printf("\nОшибка при вводе знаменателя! Повторите ввод: ");
         } while (1);
         return;
     } while (1);
 }
-void add_data(Fraction arr[], int num)// функция ввода данных о товаре.
+void add_data(Fraction arr[], int& num)// функция ввода данных о товаре.
 {
     while (num < N)
     {
@@ -50,7 +53,7 @@ void add_data(Fraction arr[], int num)// функция ввода данных 
 }
 int main()
 {
-	setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "rus");
     int n = 0;
 	Fraction arr[N];
     add_data(arr, n);
