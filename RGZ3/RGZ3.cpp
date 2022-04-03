@@ -22,10 +22,13 @@ void CheckForNegativity(Fraction arr[], int& n)
 {
     for (int i = 0; i < n; i++)
     {
-        if ((arr[i].chisl /arr[i].znam) < 0)
+        if (((arr[i].chisl) || (arr[i].znam )) <= 0)
         {
-            arr[i].chisl = arr[i + 1].chisl;
-            arr[i].znam = arr[i + 1].znam;
+            for (int j = i; j < n - 1; j++)
+            {
+                arr[j] = arr[j + 1];
+            }
+            n--;
         }
     }
 }
