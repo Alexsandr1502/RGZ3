@@ -11,19 +11,32 @@ struct Fraction
 	double segment = (double)chisl/znam;
 };
 
+void CheckForNegativity(Fraction arr[], int& n);
 void SaveInFile(Fraction arr[], int& n);
 void LoadFromFile(Fraction arr[], int& n);
 void OutputStruct(Fraction arr[], int& n);
 void check_input(int& chisl, int& znam);
 void add_data(Fraction arr[], int& num);
 
+void CheckForNegativity(Fraction arr[], int& n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if ((arr[i].chisl /arr[i].znam) < 0)
+        {
+            arr[i].chisl = arr[i + 1].chisl;
+            arr[i].znam = arr[i + 1].znam;
+        }
+    }
+}
 void SaveInFile(Fraction arr[], int& n)
 {
-    char filename[L];
-    printf("Введите название файла с расширением: ");
-    scanf("%s", filename);
+    char fname[L];
+    CheckForNegativity(arr, n);
     FILE *f;
-    if ((f = fopen(filename, "wb")) == NULL)
+    printf("Введите название файла с расширением: ");
+    scanf("%s", &fname);
+    if ((f = fopen(fname, "wb")) == NULL)
     {
         printf("Ошибка открытия файла");
         return;
@@ -33,11 +46,11 @@ void SaveInFile(Fraction arr[], int& n)
 }
 void LoadFromFile(Fraction arr[], int& n)
 {
-    char filename[L];
-    printf("Введите название файла с расширением: ");
-    scanf("%s", filename);
+    char fname[L];
     FILE* f;
-    if((f = fopen(filename, "wb")) == NULL)
+    printf("Введите название файла с расширением: ");
+    scanf("%s", &fname);
+    if((f = fopen(fname, "rb")) == NULL)
     {
         printf("Ошибка загрузки файла");
         return;
@@ -57,42 +70,53 @@ void OutputStruct(Fraction arr[], int &n)//вывод массива струк�
 }
 void check_input(int &chisl, int &znam)//Проверка ввода данных
 {
-    do
-    {
-        printf("Введите числитель: ");
         do
         {
-            scanf("%d", &chisl);
-            if (chisl > 0)  break;
-            else printf("\nОшибка при вводе числителя! Повторите ввод: ");
-        } while (1);
+            printf("Введите числитель: ");
+            do
+            {
+                scanf("%d", &chisl);
+                if ((chisl > 0) || (chisl < 0))  break;
+            } while (1);
 
-        printf("Введите знаменатель: ");
-        do
-        {
-            scanf("%d", &znam);
-            if (znam > 0)  break;
-            else printf("\nОшибка при вводе знаменателя! Повторите ввод: ");
+            printf("Введите знаменатель: ");
+            do
+            {
+                scanf("%d", &znam);
+                if ((znam > 0) || (znam < 0))  break;
+            } while (1);
+            return;
         } while (1);
-        return;
-    } while (1);
 }
 void add_data(Fraction arr[], int &num)// функция ввода данных о товаре.
 {
     while (num < N)
     {
-
         check_input(arr[num].chisl, arr[num].znam);
         num++;
     }
 }
-void Menu(Fraction arr[], int n)
+void Menu(Fraction arr[], int& n)
 {
-    void(*choise)();
-    add_data(arr, n);
-    SaveInFile(arr, n);
-    LoadFromFile(arr, n);
-    OutputStruct(arr, n);
+    int i, k, num, c;
+    void(*choise)(Fraction arr[], int& n);
+    const char* ss[] = { " 0 - ВЫХОД"," 1 - Вывод дробей",  " 2 - Ввод данных", " 3 - сохранение в файл", \
+    " 4 - загрузка из файл"};
+    k = sizeof(ss) / sizeof(ss[0]);
+    for (;;)
+    {
+        for (i = 0; i < k; i++) puts(ss[i]); // Вывод меню
+        printf("Ввод: ");
+        scanf("%d", &c);
+        switch (c)
+        {
+        case 0: return;
+        case 1: choise = OutputStruct; choise(arr, n); break;
+        case 2: choise = add_data; choise(arr, n); break;
+        case 3: choise = SaveInFile; choise(arr, n); break;
+        case 4: choise = LoadFromFile; choise(arr, n); break;
+        }
+    }
 }
 int main()
 {
