@@ -398,12 +398,12 @@ void SortFiles(Fraction arr[], const char* filename, const char* path, ...)
     const char* path_tmp = path;
     va_start(path_ptr, path);
 
-    result = fopen(filename, "wb+");
-    if (result == NULL)
+    //result = fopen(filename, "wb+");
+   /* if (result == NULL)
     {
         puts("Файл-результат не открылся");
         return;
-    }
+    }*/
 
     do
     {
@@ -418,16 +418,19 @@ void SortFiles(Fraction arr[], const char* filename, const char* path, ...)
         n = ftell(f) / sizeof(Fraction); // Определяем количество записей в файле
         rewind(f); // Позиционируем указатель на начало файла
         fread(arr, sizeof(Fraction), n, f); // Копируем записи из файла
-        if (feof(f)) break;
+        /*if (feof(f)) break;*/
+        result = fopen(filename, "ab+");
         fclose(f);
         fwrite(arr, sizeof(Fraction), n, result);
         path_tmp = va_arg(path_ptr, const char*);
-
+       
+        fclose(result);
     } while (path_tmp);
     va_end(path_ptr);
-    fclose(result);
+    //fclose(result);
+    printf("a");
 
-    vnsort1(filename);
+    /*vnsort1(filename);*/
     return;
 }
 
@@ -459,7 +462,7 @@ int main()
 {
     setlocale(LC_ALL, "");
     int n = 0;
-    Fraction arr[N];
+    Fraction arr[100];
     /*FILE* f = fopen("result.dat", "wb"); fclose(f);*/
     Menu(arr, n);
 }
